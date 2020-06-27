@@ -51,7 +51,7 @@ Edits by Jaclyn Beck
 	* Cell size cutoff GUIs now show all cells post-segmentation instead of all cells
 
 * New Utility: Pre-processing
-	* Java jar utility to mass-convert/pre-process OIR files into tiffs. Requires Java JRE or JDK to be installed. 
+	* Java jar utility to mass-convert/pre-process OIR files into tiffs. Requires FIJI to be installed.
+	* Install the jar file as a FIJI plugin. To run, open FIJI and go to Plugins->Preprocess 3DMorph.
 	* Utility uses FIJI to do background subtraction and a 2x2x2 median filter on the images. 
-	* Source code included for running as a FIJI plugin instead of a stand-alone jar. 
 
