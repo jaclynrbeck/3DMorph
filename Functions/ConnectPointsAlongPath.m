@@ -23,24 +23,20 @@ function [ mask ] = ConnectPointsAlongPath( InputImg, StartPt, EndPt )
 %EndPt is the second point of interest to be connected. It must also be of
 %value 1 in the original image. 
 
-    init = [nan inf]; % set or randomize initial parameter values. nan = not-a-number, inf = infinity.
-    D = repmat(init(1+InputImg),[1 1 1 2]); %repmat repeats copies of a matrix. This duplicates the BoundedSkel image. It also multiplies it by init, so all 0s become Nan and all 1s become Inf
-    D(StartPt(1),StartPt(2),StartPt(3),1) = 0; %set the initial and end points to 0.
-    D(EndPt(1),EndPt(2),EndPt(3),2) = 0;
-    mask = D==0; %matrix with 1s (true) where D is 0. All branch pixels are Inf.
-    n = 0; %n is the number of steps taken from starting point.
-    while isinf(D(EndPt(1),EndPt(2),EndPt(3)))&nnz(mask),% continue stepping while the endpoint (but in the first image) is inf. Once the path is connected, this value will be overwritten to 1, meaning the loop is complete. nnz = number of nonzero elements. If the path is not completed, but there are no remaining connections, the mask will only have 0s. Both of these conditions must be 1 (true) to continue.
-        n = n+1;
-        mask = convn(mask,ones([3 3 3]),'same')&isinf(D); %Convolves with cube of ones to see attached pixels?
-        D(mask) = n;
-    end
-    if isinf(D(EndPt(1),EndPt(2),EndPt(3))) %If the above loop ended, it's complete or there's no path. If it ended, but the first condition is still true (the endpoint is still Inf), then there must not have been a connecting path.
-        error('no path found');
-    else
-        mask = sum(D,4)==n; % points within minimum-length path(s). sums the two 3D matrices. Only those paths ==n are the shortest and the rest are ignored.
-        %sumBW = sum(BoundedSkel(mask)); %Optionally, can calculate the
-        %length of the connected mask in pixels.
-    end
+si = size(InputImg);
+sInd = sub2ind(si, StartPt(1), StartPt(2), StartPt(3)); 
+eInd = sub2ind(si, EndPt(1), EndPt(2), EndPt(3));
+
+D1 = bwdistgeodesic(InputImg, sInd, 'quasi-euclidean');
+D2 = bwdistgeodesic(InputImg, eInd, 'quasi-euclidean');
+D = D1+D2;
+D = round(D*10)/10; % Handles floating point rounding error
+D(isnan(D)) = inf;
+mask = imregionalmin(D);
+
+%figure; hold on
+%P = imoverlay(max(InputImg,[],3), imdilate(max(mask,[],3), ones(3,3)), [1 0 0]);
+%imshow(P, 'InitialMagnification', 200)
 
 end
 

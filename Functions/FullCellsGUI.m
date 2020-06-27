@@ -61,21 +61,13 @@ SepObjectList = evalin('base','SepObjectList');
 udSepObjectList = evalin('base','udSepObjectList');%ObjectList is large to small, flip upside down so small is plotted first in blue.
 
 num = [1:3:(3*numObjSep+1)];
-    fullimg = ones(s(1),s(2));
+    fullimg = zeros(s(1),s(2), zs);
     progbar = waitbar(0,'Plotting...');
     for i = 1:numObjSep
-            waitbar (i/numObjSep, progbar);
-            ex=zeros(s(1),s(2),zs);
-            j=udSepObjectList(i,2);
-            ex(Microglia{1,j})=1;%write in only one object to image. Cells are white on black background.
-            flatex = sum(ex,3);
-            OutlineImage = zeros(s(1),s(2));
-            OutlineImage(flatex(:,:)>1)=1;
-            se = strel('diamond',4);
-            Outline = imdilate(OutlineImage,se); 
-            fullimg(Outline(:,:)==1)=1;
-            fullimg(flatex(:,:)>1)=num(1,i+1);
-        end
+        waitbar (i/numObjSep, progbar);
+        j=udSepObjectList(i,2);
+        fullimg(Microglia{1,j}) = num(1,i+1);
+    end
 if isgraphics(progbar)
    close(progbar);
 end
@@ -83,7 +75,7 @@ end
 cmap = jet(max(fullimg(:)));
 cmap(1,:) = zeros(1,3);
 axes(handles.AllObjects);
-imagesc(fullimg);
+imagesc(max(fullimg,[],3));
 colormap(cmap);
 colorbar('Ticks',[1,3*numObjSep+1], 'TickLabels',{'Small','Large'});
 set(handles.AllObjects,'visible', 'off');

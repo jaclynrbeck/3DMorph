@@ -1,35 +1,35 @@
-function varargout = ThresholdGUI(varargin)
-% THRESHOLDGUI MATLAB code for ThresholdGUI.fig
-%      THRESHOLDGUI, by itself, creates a new THRESHOLDGUI or raises the existing
+function varargout = NucleusThresholdGUI(varargin)
+% NUCLEUSTHRESHOLDGUI MATLAB code for NucleusThresholdGUI.fig
+%      NUCLEUSTHRESHOLDGUI, by itself, creates a new NUCLEUSTHRESHOLDGUI or raises the existing
 %      singleton*.
 %
-%      H = THRESHOLDGUI returns the handle to a new THRESHOLDGUI or the handle to
+%      H = NUCLEUSTHRESHOLDGUI returns the handle to a new NUCLEUSTHRESHOLDGUI or the handle to
 %      the existing singleton*.
 %
-%      THRESHOLDGUI('CALLBACK',hObject,eventData,handles,...) calls the local
-%      function named CALLBACK in THRESHOLDGUI.M with the given input arguments.
+%      NUCLEUSTHRESHOLDGUI('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in NUCLEUSTHRESHOLDGUI.M with the given input arguments.
 %
-%      THRESHOLDGUI('Property','ThreshValue',...) creates a new THRESHOLDGUI or raises the
+%      NUCLEUSTHRESHOLDGUI('Property','ThreshValue',...) creates a new NUCLEUSTHRESHOLDGUI or raises the
 %      existing singleton*.  Starting from the left, property threshvalue pairs are
-%      applied to the GUI before ThresholdGUI_OpeningFcn gets called.  An
+%      applied to the GUI before NucleusThresholdGUI_OpeningFcn gets called.  An
 %      unrecognized property name or invalid threshvalue makes property application
-%      stop.  All inputs are passed to ThresholdGUI_OpeningFcn via varargin.
+%      stop.  All inputs are passed to NucleusThresholdGUI_OpeningFcn via varargin.
 %
 %      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
 %      instance to run (singleton)".
 %
 % See also: GUIDE, GUIDATA, GUIHANDLES
 
-% Edit the above text to modify the response to help ThresholdGUI
+% Edit the above text to modify the response to help NucleusThresholdGUI
 
-% Last Modified by GUIDE v2.5 29-Aug-2017 12:35:13
+% Last Modified by GUIDE v2.5 20-Mar-2020 18:04:54
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @ThresholdGUI_OpeningFcn, ...
-                   'gui_OutputFcn',  @ThresholdGUI_OutputFcn, ...
+                   'gui_OpeningFcn', @NucleusThresholdGUI_OpeningFcn, ...
+                   'gui_OutputFcn',  @NucleusThresholdGUI_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -44,35 +44,35 @@ end
 % End initialization code - DO NOT EDIT
 
 
-% --- Executes just before ThresholdGUI is made visible.
-function ThresholdGUI_OpeningFcn(hObject, eventdata, handles, varargin)
+% --- Executes just before NucleusThresholdGUI is made visible.
+function NucleusThresholdGUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% varargin   command line arguments to ThresholdGUI (see VARARGIN)
+% varargin   command line arguments to NucleusThresholdGUI (see VARARGIN)
 
-set(handles.ThresholdGUI,'units','normalized','position',[0 1 0.95 0.7]);
+set(handles.NucleusThresholdGUI,'units','normalized','position',[0 1 0.95 0.7]);
 
 im = evalin('base', 'img'); %'orig');
 axes(handles.OrigImg);
-imshow(max(im,[],3), []);   
+imshow(max(im,[],3), []);
 
 TryThis_Callback(hObject, eventdata, handles);
+UpdateButton_Callback(hObject, eventdata, handles);
 
-% Choose default command line output for ThresholdGUI
+% Choose default command line output for NucleusThresholdGUI
 handles.output = hObject;
 
 % Update handles structure
 guidata(hObject, handles);
 
-
-% UIWAIT makes ThresholdGUI wait for user response (see UIRESUME)
-% uiwait(handles.ThresholdGUI);
+% UIWAIT makes NucleusThresholdGUI wait for user response (see UIRESUME)
+% uiwait(handles.NucleusThresholdGUI);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = ThresholdGUI_OutputFcn(hObject, eventdata, handles) 
+function varargout = NucleusThresholdGUI_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -82,28 +82,15 @@ function varargout = ThresholdGUI_OutputFcn(hObject, eventdata, handles)
 varargout{1} = handles.output;
 
 
-
-% --- Executes on button press in checkbox1.
-function checkbox1_Callback(hObject, eventdata, handles)
-% hObject    handle to checkbox1 (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hint: get(hObject,'ThreshValue') returns toggle state of checkbox1
-box = get(hObject,'Value'); 
-% Store application data
-setappdata(handles.ThresholdGUI,'ShowImgs',box); 
-
-
 % --- Executes on button press in DecidedButton.
 function DecidedButton_Callback(hObject, eventdata, handles)
 % hObject    handle to DecidedButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
-assignin('base','ShowImg', getappdata(handles.ThresholdGUI,'ShowImgs'));
-assignin('base','NoiseIm', getappdata(handles.ThresholdGUI,'NoiseIm'));
-close(handles.ThresholdGUI);
+assignin('base','ShowNucImg', getappdata(handles.NucleusThresholdGUI,'ShowImgs'));
+assignin('base','NucNoiseIm', getappdata(handles.NucleusThresholdGUI,'NoiseIm'));
+close(handles.NucleusThresholdGUI);
 
 
 function edit1_Callback(hObject, eventdata, handles)
@@ -140,7 +127,7 @@ val = get(hObject,'Value');
 val=round(val);
 
 set(handles.PixelValue,'String',val);
-setappdata(handles.ThresholdGUI,'noise',val); 
+setappdata(handles.NucleusThresholdGUI,'noise',val); 
 
 
 
@@ -161,15 +148,23 @@ function TryThis_Callback(hObject, eventdata, handles)
 % hObject    handle to TryThis (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-adjust = getappdata(handles.ThresholdGUI,'adjust');
+adjust = getappdata(handles.NucleusThresholdGUI,'adjust');
 if isempty(adjust)
     adjust = get(handles.ThreshSlider,'value');
 end
-assignin('base','adjust', adjust);
-adjust = evalin('base','adjust');
+assignin('base','nucAdjust', adjust);
+adjust = evalin('base','nucAdjust');
+zs = evalin('base','zs');
+s = evalin('base','s');
 img(:,:,:) = evalin('base','img');
-
+%BinaryThresholdedImg=zeros(s(1),s(2),zs);
 h = waitbar(0,'Calculating...');
+% for i=1:zs %For each slice
+%     waitbar (i/zs,h);
+%     level=graythresh(img(:,:,i)); %Finds threshold level using Otsu's method. Different for each slice b/c no need to keep intensity conistent, just want to pick up all mg processes. Tried adaptive threshold, but did not produce better images.
+%     level=level*adjust; %Increase the threshold by *1.6 to get all fine processes 
+%     BinaryThresholdedImg(:,:,i) = im2bw(img(:,:,i),level);% Apply the adjusted threshold and convert from gray the black white image.
+% end
 level = graythresh(img) * adjust;
 BinaryThresholdedImg = imbinarize(img, level);
 
@@ -179,8 +174,8 @@ imshow(max(BinaryThresholdedImg,[],3), []);
 if isgraphics(h);
 close(h);
 end
-setappdata(handles.ThresholdGUI,'BinaryThresholdedImg',BinaryThresholdedImg);
-assignin('base','BinaryThresholdedImg', getappdata(handles.ThresholdGUI,'BinaryThresholdedImg'));
+setappdata(handles.NucleusThresholdGUI,'BinaryThresholdedImg',BinaryThresholdedImg);
+assignin('base','NucBinaryThresholdedImg', getappdata(handles.NucleusThresholdGUI,'BinaryThresholdedImg'));
 
 
 % --- Executes on button press in UpdateButton.
@@ -188,14 +183,14 @@ function UpdateButton_Callback(hObject, eventdata, handles)
 % hObject    handle to UpdateButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-adjust = getappdata(handles.ThresholdGUI,'noise');
+adjust = getappdata(handles.NucleusThresholdGUI,'noise');
 if isempty(adjust)
     adjust = get(handles.NoiseSlider,'value');
 end
-assignin('base','noise', adjust);
-BinaryIm(:,:,:) = evalin('base','BinaryThresholdedImg');
+assignin('base','nucNoise', adjust);
+BinaryIm(:,:,:) = evalin('base','NucBinaryThresholdedImg');
 midslice = evalin('base','midslice');
-noise = evalin('base','noise');
+noise = evalin('base','nucNoise');
 
 h=msgbox('One moment please...');
 NoiseIm=bwareaopen(BinaryIm,noise); %Removes objects smaller than set value (in pixels). For 3D inputs, uses automatic connectivity input of 26. Don't want small background dots left over from decreased threshold.
@@ -211,7 +206,7 @@ end
 axes(handles.FilteredImg);
 imshow(max(NoiseIm2,[],3), []);
 
-setappdata(handles.ThresholdGUI,'NoiseIm',NoiseIm);
+setappdata(handles.NucleusThresholdGUI,'NoiseIm',NoiseIm);
 
 
 % --- Executes on button press in HowManyObjects.
@@ -219,8 +214,8 @@ function HowManyObjects_Callback(~, eventdata, handles)
 % hObject    handle to HowManyObjects (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-assignin('base','NoiseIm', getappdata(handles.ThresholdGUI,'NoiseIm'));
-NoiseIm = evalin('base','NoiseIm');
+assignin('base','NucNoiseIm', getappdata(handles.NucleusThresholdGUI,'NoiseIm'));
+NoiseIm = evalin('base','NucNoiseIm');
 
 h=msgbox('Counting...');
 ConnectedComponents=bwconncomp(NoiseIm,26); %returns structure with 4 fields. PixelIdxList contains a 1-by-NumObjects cell array where the k-th element in the cell array is a vector containing the linear indices of the pixels in the k-th object. 26 defines connectivity. This looks at cube of connectivity around pixel.
@@ -252,8 +247,8 @@ BinaryThresholdedImg = imbinarize((im),level);% Apply the adjusted threshold and
 axes(handles.ThreshImg);
 imshow(max(BinaryThresholdedImg,[],3), []);
 set(handles.ThreshValue,'String',val);
-setappdata(handles.ThresholdGUI,'adjust',val);
-setappdata(handles.ThresholdGUI,'BinaryThresholdedImg',BinaryThresholdedImg);
+setappdata(handles.NucleusThresholdGUI,'adjust',val);
+setappdata(handles.NucleusThresholdGUI,'BinaryThresholdedImg',BinaryThresholdedImg);
 
 
 % --- Executes during object creation, after setting all properties.

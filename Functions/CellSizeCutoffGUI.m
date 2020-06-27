@@ -51,40 +51,33 @@ function CellSizeCutoffGUI_OpeningFcn(hObject, eventdata, handles, varargin)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to CellSizeCutoffGUI (see VARARGIN)
-
-
-numObj = evalin('base','numObj');
-ConnectedComponents = evalin('base','ConnectedComponents');
+numObj = evalin('base','numObjSep');
+Microglia = evalin('base','Microglia');
 s = evalin('base','s');
 zs = evalin('base','zs');
 voxscale = evalin('base','voxscale');
-ObjectList = evalin('base','ObjectList');
+ObjectList = evalin('base','SepObjectList');
 udObjectList = flipud(ObjectList);%ObjectList is large to small, flip upside down so small is plotted first in blue.
+nucColor = 3*numObj+3;
 
-num = [1:3:(3*numObj+1)];
-    fullimg = ones(s(1),s(2));
+num = 1:3:(3*numObj+1);
+    fullimg = zeros(s(1),s(2), zs);
     progbar = waitbar(0,'Plotting...');
-    for i = 1:numObj;
+    for i = 1:numObj
         waitbar (i/numObj, progbar);
-        ex=zeros(s(1),s(2),zs);
         j=udObjectList(i,2);
-        ex(ConnectedComponents.PixelIdxList{1,j})=1;%write in only one object to image. Cells are white on black background.
-        flatex = sum(ex,3);
-        OutlineImage = zeros(s(1),s(2));
-        OutlineImage(flatex(:,:)>1)=1;
-        se = strel('diamond',4);
-        Outline = imdilate(OutlineImage,se); 
-        fullimg(Outline(:,:)==1)=1;
-        fullimg(flatex(:,:)>1)=num(1,i+1);
+        fullimg(Microglia{1,j}) = num(1,i+1);
     end
+    
 if isgraphics(progbar)
    close(progbar);
 end
-        
-cmap = jet(max(fullimg(:)));
+
+cmap = jet(max(fullimg(:))+5);
 cmap(1,:) = zeros(1,3);
 axes(handles.AllObjects);
-imagesc(fullimg);
+
+imagesc(max(fullimg,[],3));
 colormap(cmap);
 colorbar('Ticks',[1,3*numObj+1], 'TickLabels',{'Small','Large'});
 set(handles.AllObjects,'visible', 'off');
@@ -141,15 +134,15 @@ function listbox1_Callback(hObject, eventdata, handles)
 % Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listbox1
 
-allObjs = evalin('base','allObjs');
-ObjectList = evalin('base','ObjectList');
+allObjs = evalin('base','AllSeparatedObjs');
+ObjectList = evalin('base','SepObjectList');
 cmap = evalin('base','cmap');
 
 SelectedValue = get(handles.listbox1,'Value');
 Object = ObjectList(SelectedValue,2);
 axes(handles.SelectedObject);
 imshow(allObjs(:,:,Object));
-colormap(cmap);
+
 setappdata(handles.CellSizeCutoffGUI,'CellSizeCutoff',ObjectList(SelectedValue,1));
 
 

@@ -1,3 +1,4 @@
+
 function [ CentroidCoord ] = SomaCentroid( CellImg )
 %SomaCentroid Finds the coordinates of the centroid pixel of the soma
 %   Erodes cell so that the centroid is not influenced by the 'weight' of
