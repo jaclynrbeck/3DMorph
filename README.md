@@ -50,3 +50,8 @@ Edits by Jaclyn Beck
 	* Threshold screens open with some default values already set. 
 	* Cell size cutoff GUIs now show all cells post-segmentation instead of all cells
 
+* New Utility: Pre-processing
+	* Java jar utility to mass-convert/pre-process OIR files into tiffs. Requires Java JRE or JDK to be installed. 
+	* Utility uses FIJI to do background subtraction and a 2x2x2 median filter on the images. 
+	* Source code included for running as a FIJI plugin instead of a stand-alone jar. 
+
